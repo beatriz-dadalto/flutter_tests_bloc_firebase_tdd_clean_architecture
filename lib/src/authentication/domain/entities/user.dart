@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
 
-class User extends Equatable{
+class User extends Equatable {
   const User({
     required this.id,
     required this.name,
@@ -10,17 +10,20 @@ class User extends Equatable{
     required this.avatar,
   });
 
+  const User.empty()
+    : this(
+        id: 1,
+        createdAt: '_empty.createdAt',
+        name: '_empty.name',
+        avatar: '_empty.avatar',
+      );
+
   final int id;
   final String name;
   final String createdAt;
   final String avatar;
 
-  User copyWith({
-    int? id,
-    String? name,
-    String? createdAt,
-    String? avatar,
-  }) {
+  User copyWith({int? id, String? name, String? createdAt, String? avatar}) {
     return User(
       id: id ?? this.id,
       name: name ?? this.name,
@@ -30,12 +33,7 @@ class User extends Equatable{
   }
 
   Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'name': name,
-      'createdAt': createdAt,
-      'avatar': avatar,
-    };
+    return {'id': id, 'name': name, 'createdAt': createdAt, 'avatar': avatar};
   }
 
   factory User.fromMap(Map<String, dynamic> map) {
@@ -61,18 +59,15 @@ class User extends Equatable{
     if (identical(this, other)) return true;
 
     return other is User &&
-      other.id == id &&
-      other.name == name &&
-      other.createdAt == createdAt &&
-      other.avatar == avatar;
+        other.id == id &&
+        other.name == name &&
+        other.createdAt == createdAt &&
+        other.avatar == avatar;
   }
 
   @override
   int get hashCode {
-    return id.hashCode ^
-      name.hashCode ^
-      createdAt.hashCode ^
-      avatar.hashCode;
+    return id.hashCode ^ name.hashCode ^ createdAt.hashCode ^ avatar.hashCode;
   }
 
   @override

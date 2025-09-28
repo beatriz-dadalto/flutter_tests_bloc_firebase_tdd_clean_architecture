@@ -1,3 +1,4 @@
+import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_tests_bloc_firebase_tdd_clean_architecture/src/authentication/domain/repositories/authentication_repository.dart';
 import 'package:flutter_tests_bloc_firebase_tdd_clean_architecture/src/authentication/domain/usecases/create_user.dart';
@@ -22,11 +23,31 @@ void main() {
     usecase = CreateUser(repository: repository);
   });
 
+  const params = CreateUserParams.empty();
+
   test('should call [AuthRepo.createUser]', () async {
-    // Arrange - what we need to work
+    // 1. Arrange - what we need to work
+    when(
+      () => repository.createUser(
+        createdAt: any(named: 'createdAt'),
+        name: any(named: 'name'),
+        avatar: any(named: 'avatar'),
+      ),
+    ).thenAnswer((_) async => const Right(null)); // null -> void
 
-    // Act
+    // 2. Act
+    final result = await usecase(params);
 
-    // Assert
+    // 3. Assert
+    // dynamic because I dont need the left (Failure). put dynamic where you dont need the result
+    expect(result, equals(const Right<dynamic, void>(null)));
+    verify(
+      () => repository.createUser(
+        createdAt: params.createdAt,
+        name: params.name,
+        avatar: params.avatar,
+      ),
+    ).called(1);
+    verifyNoMoreInteractions(repository);
   });
 }
